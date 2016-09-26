@@ -13,18 +13,13 @@
 <body>
 
     <div id="all">
-        <div v-show="layer==1" >
-            <input v-model="username" placeholder="input username"/><br>
-            <input type="password" v-model="password" placeholder="input password"/><br>
-            <input type="password" v-model="passwordAg" placeholder="input password again"/><br>
-            <input type="button" @click="submitReg" value="注册">
-            <input type="button" @click="showLogin" value="返回登录">  <label>{{regMessage}}</label>
+        <div v-show="layer==1" style="display: none">
+
+            <input style="display: none" v-show="!waitingPlayer" type="button" @click="fastStart" value="快速开始">
+            <label style="display: none" v-show="waitingPlayer" >等待中：{{waitNum}}/4</label>
+            <input style="display: none" v-show="waitingPlayer" type="button" @click="cancelWait" value="取消">
         </div>
-        <div v-show="layer==2" id="loginForm">
-            <input name="log_username"/><br>
-            <input type="password" name="log_password"/><br>
-            <input type="button" @click="submitLog" value="登录">
-            <input type="button" @click="showReg" value="注册"> <label id="log_message"></label>
+        <div v-show="layer==2" style="display: none">
         </div>
     </div>
 </body>
@@ -41,11 +36,20 @@
     var countDownInterval = 0;
 
     var pageData ={
-        layer:1
+        layer:1,
+        waitingPlayer:false
     };
     new Vue({
         el: '#all',
-        data: pageData
+        data: pageData,
+        methods: {
+            fastStart: function () {
+                this.waitingPlayer = true;
+            },
+            cancelWait: function () {
+                this.waitingPlayer = false;
+            }
+        }
     });
 
     $(document).ready(function () {
@@ -68,12 +72,11 @@
 //            setMessageInnerHTML("open");
             UID = getCookie("uno-uid");
             TOKEN = getCookie("uno-token");
-            checkAuth();
         }
 
         function removeRoomData(arr,data){
             for(var i = 0;i<arr.length;i++){
-                if(arr[i].roomId==data.roomId){
+                if(arr[i].roomId==data.roomId){+
                     arr.splice(i,1);
                     return;
                 }

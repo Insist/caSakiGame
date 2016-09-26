@@ -1,7 +1,10 @@
 package com.insist.saki.controller;
 
 import com.insist.saki.entity.UserEntity;
+import com.insist.saki.manager.GameManager;
+import com.insist.saki.model.BaseResponse;
 import com.insist.saki.util.FasterJsonTools;
+import com.insist.saki.util.ServiceUtil;
 import org.apache.log4j.Logger;
 
 import javax.websocket.*;
@@ -45,6 +48,17 @@ public class WsController {
         try {
             if(dataMap.get("type")==null){
                 return "";
+            }
+            switch (dataMap.get("type")){
+                case "login":
+                    UserEntity user = ServiceUtil.getGameService().loginGame(dataMap);
+                    this.user = user;
+                    logger.info(user.getUsername() + " has login");
+//                    GlobalManager.GAME_CHANNEL.addSession(user.getId(), session);
+//                    sendText(dataMap.get("type"),user == null ? BaseResponse.createResponse(-1, "error") : BaseResponse.SUCCESS);
+
+                    break;
+
             }
         }catch (Exception e){
             e.printStackTrace();

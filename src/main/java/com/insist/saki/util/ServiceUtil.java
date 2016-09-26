@@ -1,5 +1,6 @@
 package com.insist.saki.util;
 
+import com.insist.saki.service.GameService;
 import com.insist.saki.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -20,4 +21,7 @@ public class ServiceUtil implements ApplicationContextAware {
         return ServiceUtil.applicationContext.getBean(UserService.class);
     }
 
+    public static GameService getGameService(){
+        return ServiceUtil.applicationContext.getBean(GameService.class);
+    }
 }
